@@ -423,7 +423,7 @@ var GameLayer = cc.Layer.extend({
 });
 
 
-// ---- OLD SCHOOL
+// ---- SCENE
 GameLayer.create = function () {
     var sg = new GameLayer();
     if (sg && sg.init()) {
@@ -439,15 +439,3 @@ GameLayer.scene = function () {
     return scene;
 };
 
-//--------------------- Scene ---------------------
-
-var GameScene = cc.Scene.extend({
-    onEnter: function () {
-        this._super();
-
-        var layer = new GameLayer();
-        layer.init();
-
-        this.addChild(layer);
-    }
-});
