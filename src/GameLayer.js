@@ -375,7 +375,7 @@ var GameLayer = cc.Layer.extend({
                 b2.bodies[i];
             }
         }*/
-    }   ,
+    },
     update: function (dt) {
         b2.simulate();
         this.freeze();
@@ -483,7 +483,7 @@ var GameLayer = cc.Layer.extend({
                 sprite: this.birdSprite,
                 density: 15,
                 restitution: 0.4,
-                userData: new BodyUserData(GameObjectRoll.Bird, 99999)//250)
+                userData: new BodyUserData(GameObjectRoll.Bird, 250)
             });
 
             var vector = cc.pSub(this.birdStartPos, this.birdSprite.getPosition()),
