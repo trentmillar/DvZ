@@ -55,12 +55,12 @@ var SysMenu = cc.Layer.extend({
             this.addChild(this._player, 0, 4);
             var pos = cc.p(Math.random() * winSize.width, 0);
             this._player.setPosition(pos);
-            //this._player.runAction(cc.MoveBy.create(2, cc.p(Math.random() * winSize.width, pos.y + winSize.height + 100)));
+            this._player.runAction(cc.MoveBy.create(2, cc.p(Math.random() * winSize.width, pos.y + winSize.height + 100)));
 
-            /*if (LL.SOUND) {
+            if (LL.SOUND) {
                 cc.AudioEngine.getInstance().setBackgroundMusicVolume(0.7);
                 cc.AudioEngine.getInstance().playBackgroundMusic(s_music_theme, true);
-            }*/
+            }
 
             bRet = true;
         }

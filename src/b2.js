@@ -1,4 +1,7 @@
-﻿var MathH = {
+﻿
+var PTM_RATIO = 32;
+
+var MathH = {
     clamp: function (num, min, max) {
         return Math.min(max, Math.max(num, min));
     }
@@ -20,14 +23,23 @@ var BodyUserData = function (objectRoll, fullHealth) {
         return self.currentHealth;
     };
     this.damage = function (impulse) {
-        this.isDead = ((currentHealth -= impulse) <= 0);
+        currentHealth -= impulse;
+        if(currentHealth <= 0)
+        {
+            this.isDead=true;
+        }
+        else
+        {
+            this.isDead=false;
+        }
+        //this.isDead = ((currentHealth -= impulse) <= 0);
     };
 };
 
 var GameObjectRoll = {
-    Enemy: "ENEMY!",
-    Wood: "Wood!",
-    Bird: "BIRD!"
+    Enemy: "ENEMY",
+    Wood: "WOOD",
+    Bird: "BIRD"
 };
 Object.freeze(GameObjectRoll);
 
@@ -91,12 +103,12 @@ var b2 = (function () {
         world,
         enableDebugDraw = false,
         bodies = [],
-        PTMRatio = 30.0,
+        //PTMRatio = 30.0,
         toWorld = function (n) {
-            return n / PTMRatio;
+            return n / PTM_RATIO;
         },
         toScreen = function (n) {
-            return n * PTMRatio;
+            return n * PTM_RATIO;
         },
         b2AngleToCCRotation = function (n) {
             return (-1 * cc.RADIANS_TO_DEGREES(n));
@@ -138,7 +150,7 @@ var b2 = (function () {
             if (!bodyData || (bodyData.getHealth() == bodyData.getFullHealth() && imp0 < 12)) return;
 
             var objRoll = bodyData.getObjectRoll();
-            if (objRoll === GameObjectRoll.Enemy /* || objRoll === GameObjectRoll.Wood */) {
+            if (objRoll === GameObjectRoll.Enemy  || objRoll === GameObjectRoll.Wood ) {
                 bodyData.damage(imp0);
             }
         };
@@ -147,7 +159,11 @@ var b2 = (function () {
         damage(bBData);
     };
 
+
     return {
+        getBodies: function() {
+            return bodies;
+        },
         toWorld: function (n) {
             return toWorld(n);
         },
@@ -209,6 +225,7 @@ var b2 = (function () {
             desc.sprite.body = body;
 
             bodies.push(body);
+
         },
         simulate: function () {
             world.Step(1 / 60, // fixed time step
@@ -224,12 +241,20 @@ var b2 = (function () {
                     bAngle = body.GetAngle();
 
                 if (bodyData && bodyData.isDead) {
-                    world.DestroyBody(body);
+                    if(bodyData.getObjectRoll() == GameObjectRoll.Bird)
+                    {
+                        //todo add elapsed time
+                        //bodyData.destroyTime =
+                    }
+                    else
+                    {
+                        world.DestroyBody(body);
 
-                    userScore = (++deadsCount) * 1000;
-                    body.sprite.runAction(cc.FadeOut.create(0.5));
-                    body.SetUserData(null);
+                        userScore = (++deadsCount) * 1000;
+                        body.sprite.runAction(cc.FadeOut.create(0.5));
+                        body.SetUserData(null);
 
+                    }
                     continue;
                 }
 

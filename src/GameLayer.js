@@ -2,7 +2,6 @@ STATE_PLAYING = 0;
 STATE_GAMEOVER = 1;
 
 var TAG_SPRITE_MANAGER = 1;
-var PTM_RATIO = 32;
 
 var CMenu = cc.Sprite.extend({
     defaultScale: 0.8,
@@ -39,6 +38,7 @@ var CMenu = cc.Sprite.extend({
 });
 
 var GameLayer = cc.Layer.extend({
+    gameObjects: [],
     birdSprite: null,
     isDraggingSling: false,
     birdStartPos: cc.p(260, 440.5),
@@ -68,6 +68,7 @@ var GameLayer = cc.Layer.extend({
         sprite.setScaleY(desc.scaleY || desc.scale || 1);
         sprite.setRotation(desc.rotation || 0);
         sprite.setPosition(cc.p(desc.x || 0, desc.y || 0));
+        sprite.setTag(desc.tag);
 
         desc.shape && b2.enablePhysicsFor({
             type: desc.type,
@@ -81,9 +82,9 @@ var GameLayer = cc.Layer.extend({
         this.addChild(sprite, desc.z || 0);
         return sprite;
     },
-    /*ctor: function() {
+    ctor: function() {
     cc.associateWithNative(this, cc.Layer);
-    },*/
+    },
     init: function () {
         var bReturn = false;
         if (this._super()) {
@@ -100,21 +101,27 @@ var GameLayer = cc.Layer.extend({
 
             var bgSprite = this.addObject({
                 name: "bg",
+                tag: 1,
                 scaleY: 0.8,
                 anchor: cc.p(0, 0),
                 z: -1
             });
+            this.gameObjects.push(bgSprite);
 
             var groundSprite = this.addObject({
                 name: "ground",
+                tag: 2,
                 scaleX: 2.5,
                 anchor: cc.p(0, 0),
                 type: "static",
                 shape: "box",
                 density: 0
             });
+            this.gameObjects.push(groundSprite);
+
             var platformSprite = this.addObject({
                 name: "platform",
+                tag: 3,
                 y: 30,
                 scale: 1.5,
                 anchor: cc.p(0, 0),
@@ -122,40 +129,54 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 density: 0
             });
+            this.gameObjects.push(platformSprite);
 
             var sling1Sprite = this.addObject({
                 name: "sling1",
+                tag: 4,
                 x: 284.5,
                 y: 319.5,
                 scale: 0.7,
                 anchor: cc.p(1, 0)
             });
+            this.gameObjects.push(sling1Sprite);
+
             var sling2Sprite = this.addObject({
                 name: "sling2",
+                tag: 5,
                 x: 268.5,
                 y: 376.5,
                 scale: 0.7,
                 anchor: cc.p(1, 0),
                 z: 3
             });
+            this.gameObjects.push(sling2Sprite);
+
             var cube1Sprite = this.addObject({
                 name: "wood1",
+                tag: 6,
                 x: 840.5,
                 y: 71,
                 type: "dynamic",
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(cube1Sprite);
+
             var cube2Sprite = this.addObject({
                 name: "wood1",
+                tag: 7,
                 x: 1017.5,
                 y: 71,
                 type: "dynamic",
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(cube2Sprite);
+
             var hWood1Sprite = this.addObject({
                 name: "wood2",
+                tag: 8,
                 x: 931.5,
                 y: 131.5,
                 scaleX: 1.3,
@@ -163,8 +184,11 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(hWood1Sprite);
+
             var hWood2Sprite = this.addObject({
                 name: "wood2",
+                tag: 9,
                 x: 931.5,
                 y: 251.5,
                 scaleX: 1.3,
@@ -172,8 +196,11 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(hWood2Sprite);
+
             var hWood3Sprite = this.addObject({
                 name: "wood2",
+                tag: 10,
                 x: 880,
                 y: 330,
                 rotation: -40,
@@ -182,8 +209,11 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(hWood3Sprite);
+
             var hWood4Sprite = this.addObject({
                 name: "wood2",
+                tag: 11,
                 x: 980,
                 y: 330,
                 rotation: 40,
@@ -192,14 +222,19 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(hWood3Sprite);
+
             var cube3Sprite = this.addObject({
                 name: "wood1",
+                tag: 12,
                 x: 840.5,
                 y: 200.5,
                 type: "dynamic",
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(cube3Sprite);
+
             var cube4Sprite = this.addObject({
                 name: "wood1",
                 x: 1017.5,
@@ -208,6 +243,8 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(cube4Sprite);
+
             var cube5Sprite = this.addObject({
                 name: "wood1",
                 x: 930,
@@ -216,6 +253,7 @@ var GameLayer = cc.Layer.extend({
                 shape: "box",
                 userData: new BodyUserData(GameObjectRoll.Wood, 2000)
             });
+            this.gameObjects.push(cube5Sprite);
 
             var enemySprite = this.addObject({
                 name: "enemy",
@@ -226,6 +264,9 @@ var GameLayer = cc.Layer.extend({
                 density: 2,
                 userData: new BodyUserData(GameObjectRoll.Enemy, 400)
             });
+
+            this.gameObjects.push(enemySprite);
+
             var enemy2Sprite = this.addObject({
                 name: "enemy",
                 x: 931.5,
@@ -235,6 +276,7 @@ var GameLayer = cc.Layer.extend({
                 density: 2,
                 userData: new BodyUserData(GameObjectRoll.Enemy, 400)
             });
+            this.gameObjects.push(enemy2Sprite);
 
             this.birdSprite = this.addObject({
                 name: "bird",
@@ -297,7 +339,7 @@ var GameLayer = cc.Layer.extend({
 
             // --------- Setup Sling's Bomb ! ---------
 
-            var action = cc.Spawn.create(cc.RotateBy.create(1.5, 360), cc.JumpTo.create(1.5, this.birdStartPos, 100, 1));
+            var action = cc.Spawn.create(cc.RotateBy.create(1, 360), cc.JumpTo.create(1, this.birdStartPos, 100, 1));
             this.birdSprite.runAction(action);
 
             this.scheduleUpdate();
@@ -306,11 +348,41 @@ var GameLayer = cc.Layer.extend({
         }
         return bReturn;
     },
+    freeze: function() {
+        var isDone = true;
+        var i;
+        var b = b2.getBodies();
+        for(i=0; i<b.length; i++)
+        {
+            if(b[i].GetLinearVelocity() < 2.0)
+            {
+                isDone = false;
+            }
+        }
+
+        if(isDone && this.birdSprite.body && this.birdSprite.body.GetLinearVelocity().length < 2.0)
+        {
+            cc.log("is done.");
+        }
+        else
+        {
+            cc.log("NOT");
+        }
+        /*if(b2.bodies)
+        {
+            for(i=0;i<b2.bodies.length;i++)
+            {
+                b2.bodies[i];
+            }
+        }*/
+    }   ,
     update: function (dt) {
         b2.simulate();
+        this.freeze();
 
         if (this.birdSprite.body) {
             var bData = this.birdSprite.body.GetUserData();
+            cc.log("Velocity is " + this.birdSprite.body.GetLinearVelocity().Length()) ;
             if (!bData || bData.isContacted) return;
 
             var birdPos = this.birdSprite.getPosition(),
@@ -325,6 +397,11 @@ var GameLayer = cc.Layer.extend({
                     scale: Math.random() >= 0.5 ? 0.8 : 0.6
                 });
             }
+            //if(this.birdSprite.body.velocity)
+        }
+        else
+        {
+            var i=1;
         }
     },
     onTouchesBegan: function (touch, evt) {
@@ -406,7 +483,7 @@ var GameLayer = cc.Layer.extend({
                 sprite: this.birdSprite,
                 density: 15,
                 restitution: 0.4,
-                userData: new BodyUserData(GameObjectRoll.Bird, 250)
+                userData: new BodyUserData(GameObjectRoll.Bird, 99999)//250)
             });
 
             var vector = cc.pSub(this.birdStartPos, this.birdSprite.getPosition()),
