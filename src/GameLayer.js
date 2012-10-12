@@ -92,8 +92,8 @@ var GameLayer = cc.Layer.extend({
             this.removeAllChildrenWithCleanup(true);
             this.setTouchEnabled(true);
 
-             this.director = cc.Director.getInstance();
-              var  self = this,
+             var director = cc.Director.getInstance(),
+                self = this,
                 winSize = director.getWinSize();
 
             b2.initWorld();
@@ -360,6 +360,34 @@ var GameLayer = cc.Layer.extend({
             {
                 isDone = false;
             }
+
+            //Check if sprite is onScreen
+            if(b[i].GetUserData()
+                    && (b[i].GetUserData().getObjectRoll() == GameObjectRoll.Bird
+                    || b[i].GetUserData().getObjectRoll() == GameObjectRoll.Enemy
+                    || b[i].GetUserData().getObjectRoll() == GameObjectRoll.Wood))
+            {
+                var spr = b[i].sprite;
+                var minX = -1 * spr.getContentSize().width;
+                var maxX = cc.Director.getInstance().getWinSize().width - minX;//spr.getContentSize().width * 0.5;
+                var minY = 0;//spr.getContentSize().height * 0.5;
+                var maxY = cc.Director.getInstance().getWinSize().height - minY;//spr.getContentSize().height * 0.5;
+                var mPos = spr.getPosition();
+
+                if(mPos.x > maxX
+                        || mPos.x < minX
+                        || mPos.y > maxY
+                        || mPos.y < minY)
+                {
+                    cc.log("DEAD");
+                    //Is off screen
+                    b2.getWorld().DestroyBody(b[i]);
+
+                     //userScore = (++deadsCount) * 1000;
+                     //body.sprite.runAction(cc.FadeOut.create(0.5));
+                    b[i].SetUserData(null);
+                }
+            }
         }
 
         if(isDone && this.birdSprite.body)
@@ -370,18 +398,8 @@ var GameLayer = cc.Layer.extend({
         {
             cc.log("NOT");
         }
-        /*if(b2.bodies)
-        {
-            for(i=0;i<b2.bodies.length;i++)
-            {
-                b2.bodies[i];
-            }
-        }*/
-    },
-<<<<<<< HEAD
-=======
 
->>>>>>> updated images and freeze
+    },
     update: function (dt) {
         b2.simulate();
         //this.freeze();

@@ -95,6 +95,7 @@ var b2Body = Box2D.Dynamics.b2Body,
     ClipVertex = Box2D.Collision.ClipVertex,
     Features = Box2D.Collision.Features,
     IBroadPhase = Box2D.Collision.IBroadPhase;
+    //ccDirector = cc.Director.getInstance();
 
 var b2 = (function () {
     var self = this,
@@ -163,6 +164,9 @@ var b2 = (function () {
     return {
         getBodies: function() {
             return bodies;
+        },
+        getWorld: function() {
+            return world;
         },
         toWorld: function (n) {
             return toWorld(n);
@@ -289,4 +293,4 @@ var b2 = (function () {
             }
         }
     };
-} ()); 
+} ());
