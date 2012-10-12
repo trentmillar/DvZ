@@ -38,6 +38,7 @@ var CMenu = cc.Sprite.extend({
 });
 
 var GameLayer = cc.Layer.extend({
+    director: null,
     gameObjects: [],
     birdSprite: null,
     isDraggingSling: false,
@@ -91,8 +92,8 @@ var GameLayer = cc.Layer.extend({
             this.removeAllChildrenWithCleanup(true);
             this.setTouchEnabled(true);
 
-            var director = cc.Director.getInstance(),
-                self = this,
+             this.director = cc.Director.getInstance();
+              var  self = this,
                 winSize = director.getWinSize();
 
             b2.initWorld();
@@ -343,6 +344,7 @@ var GameLayer = cc.Layer.extend({
             this.birdSprite.runAction(action);
 
             this.scheduleUpdate();
+            this.schedule(this.freeze, 3);
 
             bReturn = true;
         }
@@ -354,15 +356,15 @@ var GameLayer = cc.Layer.extend({
         var b = b2.getBodies();
         for(i=0; i<b.length; i++)
         {
-            if(b[i].GetLinearVelocity() < 2.0)
+            if(b[i].GetLinearVelocity().Length() > 2.0)
             {
                 isDone = false;
             }
         }
 
-        if(isDone && this.birdSprite.body && this.birdSprite.body.GetLinearVelocity().length < 2.0)
+        if(isDone && this.birdSprite.body)
         {
-            cc.log("is done.");
+            cc.log("DONE");
         }
         else
         {
@@ -376,13 +378,17 @@ var GameLayer = cc.Layer.extend({
             }
         }*/
     },
+<<<<<<< HEAD
+=======
+
+>>>>>>> updated images and freeze
     update: function (dt) {
         b2.simulate();
-        this.freeze();
+        //this.freeze();
 
         if (this.birdSprite.body) {
             var bData = this.birdSprite.body.GetUserData();
-            cc.log("Velocity is " + this.birdSprite.body.GetLinearVelocity().Length()) ;
+            //cc.log("Velocity is " + this.birdSprite.body.GetLinearVelocity().Length()) ;
             if (!bData || bData.isContacted) return;
 
             var birdPos = this.birdSprite.getPosition(),

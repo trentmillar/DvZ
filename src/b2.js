@@ -241,12 +241,12 @@ var b2 = (function () {
                     bAngle = body.GetAngle();
 
                 if (bodyData && bodyData.isDead) {
-                    if(bodyData.getObjectRoll() == GameObjectRoll.Bird)
+                    /*if(bodyData.getObjectRoll() == GameObjectRoll.Bird)
                     {
                         //todo add elapsed time
                         //bodyData.destroyTime =
                     }
-                    else
+                    else */
                     {
                         world.DestroyBody(body);
 
